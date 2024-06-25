@@ -1,0 +1,15 @@
+
+.nav_Container {
+    display: flex;
+    justify-content: center;
+}
+
+a:link {
+    margin-left: 5px;
+    text-decoration: none;
+}
+
+a.active{
+    color: darkviolet;
+    text-decoration: underline;
+  } 
