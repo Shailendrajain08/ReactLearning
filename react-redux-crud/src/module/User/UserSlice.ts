@@ -23,7 +23,11 @@ export const createUserAction = createAsyncThunk(
 const userSlice = createSlice({
     name: "user",
     initialState,
-    reducers: {},
+    reducers: {
+        resetCreateListStatus : (state) => {
+            state.createUserFormStatus = ApiStatus.ideal
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(getUserListAction.pending, (state) => {
             state.listStatus = ApiStatus.loading
@@ -50,3 +54,4 @@ const userSlice = createSlice({
 })
 
 export default userSlice.reducer;
+export const { resetCreateListStatus } = userSlice.actions

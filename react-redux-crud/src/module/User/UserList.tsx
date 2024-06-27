@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
 import { ApiStatus, IUser } from "./User.type";
 import { getUserListAction } from "./UserSlice";
+import Style from "./UserFormStyle.module.css";
+import { Modal } from "../../components/Modal";
 
 const UserList = () => {
+  const [userDataToView, setUserDataToView] = useState<IUser | null>(null);
   const { list, listStatus } = useAppSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
 
@@ -15,13 +18,13 @@ const UserList = () => {
   return (
     <>
       <div>
-        <table>
+        <table className={Style.table}>
           <thead>
-            <tr>
-              <th>Sr. No.</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Action</th>
+            <tr className={Style.tr}>
+              <th className={Style.th}>Sr. No.</th>
+              <th className={Style.th}>Name</th>
+              <th className={Style.th}>Email</th>
+              <th className={Style.th}>Action</th>
             </tr>
           </thead>
 
@@ -33,17 +36,47 @@ const UserList = () => {
             list.map((user: IUser, index: number) => {
               return (
                 <tbody>
-                  <tr>
-                    <td>{index + 1}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>Action</td>
+                  <tr className={Style.tr}>
+                    <td className={Style.td}>{index + 1}</td>
+                    <td className={Style.td}>{user.name}</td>
+                    <td className={Style.td}>{user.email}</td>
+                    <td>
+                      <div>
+                        <input
+                          type="button"
+                          value={"View"}
+                          onClick={() => {
+                            
+                            setUserDataToView(user);
+                          }}
+                        />
+                        <input type="button" value={"Edit"} />
+                        <input type="button" value={"Delete"} />
+                      </div>
+                    </td>
                   </tr>
                 </tbody>
               );
             })}
         </table>
       </div>
+      {userDataToView && (
+        <Modal
+          title="User Details"
+          onClose={() => {
+            setUserDataToView(null);
+          }}
+        >
+          <div>
+          <div>
+            <label>Name : {userDataToView.name}</label>
+          </div>
+          <div>
+            <label>Email : {userDataToView.email}</label>
+          </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

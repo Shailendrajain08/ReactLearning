@@ -1,14 +1,17 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import {FormInput} from "../../components/Input/input";
 import Style from "./UserFormStyle.module.css";
-import { useAppDispatch } from "../../app/hooks";
-import { createUserAction } from "./UserSlice";
-import { IUserForm } from "./User.type";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { createUserAction, resetCreateListStatus } from "./UserSlice";
+import { ApiStatus, IUserForm } from "./User.type";
+import { RootState } from "../../app/store";
 
 const UserForm = () => {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    
+    const {createUserFormStatus} = useAppSelector(( state: RootState ) => state.user)
     const dispatch = useAppDispatch()
 
     const onSubmitForm = (e: React.FormEvent) => {
@@ -18,8 +21,16 @@ const UserForm = () => {
         dispatch(createUserAction(data))
     }
 
+    useEffect(() => {
+      if(createUserFormStatus === ApiStatus.success){
+        setName("")
+        setEmail("")
+        dispatch(resetCreateListStatus)
+      }
+    }, [createUserFormStatus])
+
   return (
-    <>
+    <>  
       <div className={Style.container}>
         <form className={Style.form} onSubmit={onSubmitForm}>
             <FormInput label="Name" value={name} type="text" onChange={(e: ChangeEvent<HTMLInputElement>) => [
