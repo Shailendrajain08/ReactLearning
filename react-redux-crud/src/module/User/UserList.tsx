@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
 import { ApiStatus, IUser } from "./User.type";
-import { getUserListAction } from "./UserSlice";
+import { deleteUserAction, getUserListAction } from "./UserSlice";
 import Style from "./UserFormStyle.module.css";
 import { Modal } from "../../components/Modal";
+import { useNavigate } from "react-router-dom";
 
 const UserList = () => {
   const [userDataToView, setUserDataToView] = useState<IUser | null>(null);
   const { list, listStatus } = useAppSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
+
+  const navigator =  useNavigate() 
 
   useEffect(() => {
     dispatch(getUserListAction());
@@ -46,12 +49,16 @@ const UserList = () => {
                           type="button"
                           value={"View"}
                           onClick={() => {
-                            
+
                             setUserDataToView(user);
                           }}
                         />
-                        <input type="button" value={"Edit"} />
-                        <input type="button" value={"Delete"} />
+                        <input type="button" value={"Edit"} onClick={() => {
+                          navigator(`/edit/${user.id}`)
+                        }}/>
+                        <input type="button" value={"Delete"} onClick={() => {
+                          dispatch(deleteUserAction(user.id))
+                        }}/>
                       </div>
                     </td>
                   </tr>

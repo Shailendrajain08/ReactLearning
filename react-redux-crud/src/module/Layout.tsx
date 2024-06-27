@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import GlobalNav from "./GlobalNav";
 import Style from "./LayOutStyles.module.css";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = () => {
   return (
@@ -17,6 +19,7 @@ const Layout = () => {
           <Outlet/>
         </main>
       </section>
+      <ToastContainer />
     </>
   );
 };
